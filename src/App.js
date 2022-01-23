@@ -4,72 +4,29 @@ import styled from "styled-components";
 
 const App = () => {
 
-    const image = ['😃', '🎶', '😉', '👏', '🎂', '🐱']
+    const image = ['😃', '🎶', '😉']
 
-    const initialCards = [
-        {
-            id: 1,
-            img: '',
-            visible: false
-        },
-        {
-            id: 2,
-            img: '',
-            visible: false
-        },
-        {
-            id: 3,
-            img: '',
-            visible: false
-        },
-        {
-            id: 4,
-            img: '',
-            visible: false
-        },
-        {
-            id: 5,
-            img: '',
-            visible: false
-        },
-        {
-            id: 6,
-            img: '',
-            visible: false
-        },
-        {
-            id: 7,
-            img: '',
-            visible: false
-        },
-        {
-            id: 8,
-            img: '',
-            visible: false
-        },
-        {
-            id: 9,
-            img: '',
-            visible: false
-        },
-        {
-            id: 10,
-            img: '',
-            visible: false
-        },
-        {
-            id: 11,
-            img: '',
-            visible: false
-        },
-        {
-            id: 12,
-            img: '',
-            visible: false
-        },
-    ]
+    const [cards, setCards] = useState([{
+        id:Math.random(),
+        img: '',
+        visible: false
+    }])
 
-    const [cards, setCards] = useState(initialCards)
+    useEffect( () => {
+        let copyCards = [...cards]
+        for ( let i = 1; i < image.length * 2; i++ ) {
+            copyCards.push(
+                {
+                    id:Math.random(),
+                    img: '',
+                    visible: false
+                }
+            )
+        }
+        setCards(copyCards)
+    },[] )
+
+    console.log(cards)
 
     const addImage = () => {
 
@@ -79,7 +36,7 @@ const App = () => {
             for (let k = 0; k < 2; k++) {
                 let randomIndex;
                 do {
-                    randomIndex = Math.floor(Math.random() * 12)
+                    randomIndex = Math.floor(Math.random() * image.length * 2)
                 } while (
                     newArr[randomIndex].img !== ''
                     )
@@ -142,12 +99,15 @@ const App = () => {
     },[cards])
 
     const clearCardHistory = () => {
-
-        setCards(initialCards)
+        let copyCards = [...cards]
+        let change = copyCards.map(el => el.visible = false)
+        setCards(change)
         setHistory([])
         setOpenResult(false)
 
     }
+
+
 
     return (
 
