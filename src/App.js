@@ -4,29 +4,30 @@ import styled from "styled-components";
 
 const App = () => {
 
-    const image = ['😃', '🎶', '😉']
+    const image = ['🎁', '🏈', '🥇']
 
-    const [cards, setCards] = useState([{
-        id:Math.random(),
+    const initialCard = [{
+        id: Math.random(),
         img: '',
         visible: false
-    }])
+    }]
 
-    useEffect( () => {
+    const [cards, setCards] = useState(initialCard)
+
+    const create = () => {
         let copyCards = [...cards]
-        for ( let i = 1; i < image.length * 2; i++ ) {
+        for (let i = 1; i < image.length * 2; i++) {
             copyCards.push(
                 {
-                    id:Math.random(),
+                    id: Math.random(),
                     img: '',
                     visible: false
                 }
             )
         }
         setCards(copyCards)
-    },[] )
+    }
 
-    console.log(cards)
 
     const addImage = () => {
 
@@ -47,6 +48,7 @@ const App = () => {
         setCards(newArr)
     }
 
+
     const [history, setHistory] = useState([])
 
     const openCard = (id) => {
@@ -55,12 +57,10 @@ const App = () => {
         const newArr = cards.map(el => {
 
             if (el.id === id) {
-                newHistory.push(el.img)
+                newHistory.unshift(el.img)
                 return {...el, visible: true}
 
-                }
-
-            else return el
+            } else return el
         })
         setHistory(newHistory)
         setCards(newArr)
@@ -69,18 +69,22 @@ const App = () => {
 
     const checkPairs = () => {
 
-        if ( history[history.length - 1] !== history[history.length - 2]) {
-            const newArray = cards.map(el => el.img === history[history.length - 1]
-                || el.img === history[history.length - 2] ? {...el, visible: false} : el )
-            setCards(newArray)
+        if (history.length % 2 === 0) {
+
+            if (history[0] !== history[1]) {
+                const newArray = cards.map(el => el.img === history[0] || el.img === history[1] ? {
+                    ...el,
+                    visible: false
+                } : el)
+                setCards(newArray)
+            }
         }
 
     }
 
-    useEffect( () => {
-        if (!(history.length % 2))
-            setTimeout( () => checkPairs() , 1000 )
-    },[history])
+    useEffect(() => {
+        setTimeout(() => checkPairs(), 1000)
+    }, [history])
 
 
     const [openResult, setOpenResult] = useState(false)
@@ -89,24 +93,30 @@ const App = () => {
 
         if (cards.filter(el => !el.visible).length === 0) {
             setOpenResult(true)
-            setTimeout( () => clearCardHistory() , 2000 )
+            setTimeout(() => clearCardHistory(), 3000)
+
+
         }
 
     }
 
-    useEffect( () => {
+
+    useEffect(() => {
         checkResult()
-    },[cards])
+    }, [cards])
+
+
 
     const clearCardHistory = () => {
         let copyCards = [...cards]
         let change = copyCards.map(el => el.visible = false)
+
         setCards(change)
+        setCards(initialCard)
         setHistory([])
         setOpenResult(false)
 
     }
-
 
 
     return (
@@ -115,10 +125,13 @@ const App = () => {
 
             <h1> Memory Game </h1>
 
-            <button onClick={addImage} disabled={cards[0].img !== ''}> Start</button>
-
-            { openResult &&
+            <button onClick={create} >add card</button>
+            <button onClick={addImage} disabled={history.length !== 0}> Start</button>
+            {
+                openResult
+                &&
                 <h3> Congratulation! You won! in {history.length / 2} steps. </h3>
+
             }
 
             <Wrapper
