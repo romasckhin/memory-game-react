@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const App = () => {
 
-    const image = ['🎁', '🏈', '🥇']
+    const image = ['🎁', '🏈', '🥇', '🧶', '🎨','👙']
 
     const initialCard = [{
         id: Math.random(),
@@ -13,6 +13,7 @@ const App = () => {
     }]
 
     const [cards, setCards] = useState(initialCard)
+
 
     const create = () => {
         let copyCards = [...cards]
@@ -28,6 +29,7 @@ const App = () => {
         setCards(copyCards)
     }
 
+    console.log(cards)
 
     const addImage = () => {
 
@@ -44,7 +46,6 @@ const App = () => {
                 newArr[randomIndex].img = image[i]
             }
         }
-
         setCards(newArr)
     }
 
@@ -125,8 +126,8 @@ const App = () => {
 
             <h1> Memory Game </h1>
 
-            <button onClick={create} >add card</button>
-            <button onClick={addImage} disabled={history.length !== 0}> Start</button>
+            <button onClick={create} >Add Card</button>
+            <button onClick={addImage} disabled={history.length !== 0}> Start Game</button>
             {
                 openResult
                 &&
